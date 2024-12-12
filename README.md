@@ -1,25 +1,145 @@
 # DICOM-converter-API
-DICOM converter API
+### **DICOM Converter API: Summary**
+
+The **DICOM Converter API** is a robust solution for handling medical imaging data, enabling seamless conversion between various formats and the DICOM standard. Built with FastAPI, it is designed to be efficient, scalable, and user-friendly for healthcare and imaging workflows.
+
+---
+
+### **Features**
+
+#### **1. Format Conversion**
+- **From DICOM**:
+  - Convert DICOM files into widely-used formats:
+    - **JPEG**: Single-frame images.
+    - **PNG**: High-quality single-frame images.
+    - **PDF**: Embedded metadata and image data.
+    - **TIFF**: Multi-frame high-resolution images.
+    - **MP4**: Multi-frame sequences as video files.
+
+- **To DICOM**:
+  - Convert various formats into DICOM:
+    - **JPEG**: Single-frame DICOM.
+    - **PNG**: Single-frame DICOM.
+    - **PDF**: PDF pages converted to multi-frame DICOM.
+    - **TIFF**: Multi-frame DICOM.
+    - **MP4**: Videos converted into multi-frame DICOM.
+
+---
+
+#### **2. Metadata Extraction**
+- Extract detailed metadata from DICOM files, including:
+  - Patient Name
+  - Patient ID
+  - Study Date
+  - Modality
+  - Study Description
+  - Manufacturer
+
+---
+
+#### **3. Batch Processing**
+- Process multiple files in a single API request:
+  - Convert multiple files to desired formats (e.g., DICOM, JPEG, TIFF).
+  - Handle errors gracefully for individual files without interrupting the batch process.
+
+---
+
+#### **4. Robust Error Handling**
+- Comprehensive error reporting for API consumers:
+  - Clearly indicate failures for individual files in batch operations.
+  - Include detailed messages about missing files, unsupported formats, or conversion issues.
+
+---
+
+### **Endpoints**
+
+#### **1. `/convert`**
+- **Purpose**: Convert a single DICOM file to various formats.
+- **Input**: File, target format, and optional quality parameter.
+- **Output**: Converted file path.
+
+#### **2. `/convert-batch`**
+- **Purpose**: Convert multiple DICOM files to multiple formats.
+- **Input**: List of files and target formats.
+- **Output**: Conversion results for each file and format.
+
+#### **3. `/convert-to-dicom`**
+- **Purpose**: Convert supported formats (JPEG, PNG, PDF, TIFF, MP4) into DICOM.
+- **Input**: File, input format, and metadata (e.g., Patient Name, ID).
+- **Output**: Generated DICOM file path.
+
+#### **4. `/convert-to-dicom-batch`**
+- **Purpose**: Batch conversion of multiple files into DICOM.
+- **Input**: List of files, input formats, and metadata.
+- **Output**: Conversion results for each file.
+
+#### **5. `/metadata`**
+- **Purpose**: Extract metadata from a single DICOM file.
+- **Input**: File.
+- **Output**: Metadata as a JSON object.
+
+#### **6. `/metadata-batch`**
+- **Purpose**: Extract metadata from multiple DICOM files.
+- **Input**: List of files.
+- **Output**: Metadata for each file.
+
+---
+
+### **Technical Highlights**
+1. **Built with FastAPI**:
+   - High performance and modern Python capabilities.
+   - Interactive API documentation via Swagger and ReDoc.
+
+2. **Advanced Conversion Logic**:
+   - Leverages libraries like `pydicom`, `Pillow`, `opencv-python`, `pdf2image`, and `tifffile`.
+
+3. **Batch Error Resilience**:
+   - Handles failures on a per-file basis in batch operations.
+   - Provides detailed logs and structured error responses.
+
+4. **Extensibility**:
+   - Easily add support for more formats or advanced metadata extraction.
+
+---
+
+### **Use Cases**
+1. **Healthcare Providers**:
+   - Manage and exchange medical images in DICOM format across systems.
+   - Convert DICOM files into formats for presentations or reports.
+
+2. **Research and Development**:
+   - Process and analyze large datasets of imaging files.
+   - Automate format conversions for AI/ML pipelines.
+
+3. **Imaging Centers**:
+   - Create DICOM files from scanned documents or patient data.
+
+---
+
+### **Quick Setup**
+1. Clone the repository.
+2. Install dependencies (`pip install -r requirements.txt`).
+3. Run the API locally or as a Docker container.
+4. Access the interactive API documentation at `/docs`.
+
+---
+
 
 
 
 ## New Features
 
-Additional Formats
+- Added a quality parameter for JPEG and PNG to customize image compression.
 
-Added support for PNG and GIF.
+- Metadata Extraction.
 
-Added a quality parameter for JPEG and PNG to customize image compression.
+- Single Metadata Extraction (/metadata):
 
-Metadata Extraction
+- Extracts metadata from a single DICOM file.
 
-Single Metadata Extraction (/metadata):
+- Batch Metadata Extraction (/metadata-batch):
 
-Extracts metadata from a single DICOM file.
-
-Batch Metadata Extraction (/metadata-batch):
-
-Extracts metadata from multiple DICOM files.
+- Extracts metadata from multiple DICOM files.
 
 ## Endpoints
 Convert a Single File
