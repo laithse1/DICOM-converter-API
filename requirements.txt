@@ -1,0 +1,10 @@
+fastapi
+pydantic
+uvicorn
+gunicorn
+pydicom
+pillow
+reportlab
+tifffile
+opencv-python-headless
+numpy

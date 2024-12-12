@@ -388,3 +388,369 @@ If an endpoint fails, verify:
 The DICOM file format is valid.
 
 The file contains the required data (e.g., pixel data for image generation).
+
+## Run the following command to build the Docker image:
+
+```
+docker build -t dicom-api .
+```
+
+This creates a Docker image named dicom-api
+
+## Run the container and expose the API to the host:
+
+```
+docker run -d --name dicom-api -p 8000:8000 dicom-api
+```
+-d: Runs the container in detached mode (background).
+
+--name: Names the container dicom-api.
+
+-p 8000:8000: Maps the container's port 8000 to the host's port 8000.
+
+For easier management, create a docker-compose.yml file:
+
+Run the application with:
+
+```
+docker-compose up -d
+
+```
+
+## Persistent Logs
+
+Mount a volume to save logs outside the container:
+
+```
+docker run -d --name dicom-api -p 8000:8000 -v /var/log/dicom-api:/app/logs dicom-api
+
+```
+
+## Monitor Containers
+Use Docker commands to manage and monitor:
+
+Check running containers:
+
+```
+docker ps
+```
+View logs:
+
+```
+docker logs dicom-api
+
+```
+Here’s a list of all the required libraries for this API to run, including their purpose and installation commands:
+
+Core Libraries
+
+1.	fastapi:
+
+o	Used to create the API framework.
+
+o	Installation: 
+
+o	pip install fastapi
+
+2.	uvicorn:
+
+o	ASGI server to run the FastAPI app.
+
+o	Installation: 
+
+o	pip install uvicorn
+
+3.	typing:
+
+
+o	Provides type annotations (part of Python standard library in Python 3.5+).
+
+4.	os, shutil, tempfile:
+
+o	Standard Python libraries for file system operations.
+
+________________________________________
+DICOM Handling
+
+5.	pydicom: 
+
+o	Used to handle DICOM file operations.
+
+o	Installation: 
+
+o	pip install pydicom
+
+________________________________________
+Image and Video Processing
+
+6.	Pillow:
+
+o	Used for image processing (e.g., JPEG, PNG, TIFF).
+
+o	Installation: 
+
+o	pip install pillow
+
+7.	opencv-python:
+
+o	Used for video processing (e.g., MP4).
+
+o	Installation: 
+
+o	pip install opencv-python
+
+8.	numpy:
+
+o	Used for handling pixel data and numerical operations.
+
+o	Installation: 
+
+o	pip install numpy
+
+________________________________________
+PDF Handling
+
+9.	reportlab:
+
+o	Used to create PDF files.
+
+o	Installation: 
+
+o	pip install reportlab
+
+10.	pdf2image:
+
+o	Used to convert PDF pages to images.
+
+o	Installation:
+
+o	pip install pdf2image
+
+o	Additional Dependency: Requires poppler-utils (see below).
+________________________________________
+TIFF Handling
+
+11.	tifffile: 
+
+o	Used to handle TIFF image files.
+
+o	Installation: 
+
+o	pip install tifffile
+
+________________________________________
+External Dependency
+
+12.	poppler-utils: 
+
+o	Required for pdf2image to work.
+
+o	Installation: 
+
+	Ubuntu/Debian: 
+
+	sudo apt install poppler-utils
+
+	MacOS: 
+
+	brew install poppler
+
+	Windows: 
+
+	Download the Poppler binary from Poppler for Windows.
+
+	Add the bin folder to your system's PATH.
+
+________________________________________
+Install All Dependencies at Once
+
+To simplify, create a requirements.txt file with the following contents:
+
+fastapi
+
+uvicorn
+
+pydicom
+
+pillow
+
+opencv-python
+
+numpy
+
+reportlab
+
+pdf2image
+
+tifffile
+
+Then, install all dependencies using:
+
+pip install -r requirements.txt
+
+For poppler-utils, ensure it is installed separately as per the instructions above.
+________________________________________
+Verify Installations
+
+After installing, verify by running:
+
+python -c "import fastapi, pydicom, PIL, cv2, numpy, reportlab, tifffile, pdf2image; print('All libraries installed successfully!')"
+
+
+
+
+Here is the complete list of required libraries for the DICOM Converter API to function correctly:
+________________________________________
+Required Libraries
+
+Python Libraries (Installable via pip)
+1.	FastAPI
+
+o	Web framework for building APIs.
+
+o	Install: 
+
+o	pip install fastapi
+
+2.	Uvicorn
+
+o	ASGI server to run FastAPI.
+
+o	Install: 
+
+o	pip install uvicorn
+
+3.	Pillow
+
+o	Library for image processing (used for JPEG, PNG, TIFF handling).
+
+o	Install: 
+
+o	pip install pillow
+
+4.	pydicom
+
+o	Library to handle DICOM files (reading, writing, and processing).
+
+o	Install: 
+
+o	pip install pydicom
+
+5.	tifffile
+
+o	Library for reading and writing TIFF files.
+
+o	Install: 
+
+o	pip install tifffile
+
+6.	numpy
+
+o	Numerical computing library (used for pixel data manipulation).
+
+o	Install: 
+
+o	pip install numpy
+
+7.	opencv-python
+
+o	Library for video processing (used for MP4 to DICOM conversion).
+
+o	Install: 
+
+o	pip install opencv-python
+
+8.	pdf2image
+
+o	Library to convert PDF pages to images (requires Poppler installed).
+
+o	Install: 
+
+o	pip install pdf2image
+
+9.	reportlab
+
+o	Library for generating PDFs (used for embedding DICOM metadata in PDFs).
+
+o	Install: 
+
+o	pip install reportlab
+
+10.	typing-extensions
+
+o	Provides additional type hints and utilities for type checking.
+
+o	Install: 
+
+o	pip install typing-extensions
+
+Poppler
+
+•	Required by pdf2image for PDF processing.
+
+•	Install manually on your system: 
+
+o	Windows: Download Poppler for Windows, extract, and add to PATH.
+
+o	Linux: 
+
+o	sudo apt install poppler-utils
+
+o	MacOS: 
+
+o	brew install poppler
+________________________________________
+Optional for Development
+
+1.	Requests
+
+o	HTTP client for testing endpoints.
+
+o	Install: 
+
+o	pip install requests
+
+2.	Python-dotenv
+
+o	Manage environment variables from a .env file (if used).
+
+o	Install: 
+
+o	pip install python-dotenv
+
+________________________________________
+Full Installation Command
+
+You can install all required Python libraries in one command:
+
+pip install fastapi uvicorn pillow pydicom tifffile numpy opencv-python pdf2image reportlab typing-extensions
+
+________________________________________
+System Requirements
+
+•	Poppler: Must be installed and accessible in the system PATH for PDF conversion.
+
+•	Python Version: Ensure Python 3.8 or higher.
+
+________________________________________
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
