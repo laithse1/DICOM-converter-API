@@ -16,6 +16,14 @@ from pdf2image import convert_from_path
 from pydicom.uid import ExplicitVRLittleEndian , generate_uid
 from pydicom.dataset import Dataset
 from pdf2image import convert_from_path
+from auth_middleware import authentication_middleware
+from rate_limiter import limiter
+from auth_utils import create_jwt_token
+from fastapi import Form
+
+app = FastAPI()
+app.middleware("http")(authentication_middleware)
+
 
 
 
@@ -146,7 +154,17 @@ def extract_metadata(dicom_file: UploadFile) -> Dict:
 # API Endpoints
 
 
+@app.post("/login")
+async def login(username: str = Form(...), password: str = Form(...)):
+    # Replace with your authentication logic
+    if username == "admin" and password == "password":  # Replace with real credentials
+        token = create_jwt_token(username)
+        return {"access_token": token, "token_type": "bearer"}
+    raise HTTPException(status_code=401, detail="Invalid credentials")
+
+
 @app.post("/convert", response_class=JSONResponse)
+@limiter.limit("10/minute")  # Limit to 10 requests per minute
 async def convert_dicom(
     request: Request,
     file: UploadFile = File(...),

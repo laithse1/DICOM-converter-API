@@ -1,5 +1,5 @@
 # DICOM-converter-API
-### **DICOM Converter API: Summary**
+### **DICOM Converter API Summary: **
 
 The **DICOM Converter API** is a robust solution for handling medical imaging data, enabling seamless conversion between various formats and the DICOM standard. Built with FastAPI, it is designed to be efficient, scalable, and user-friendly for healthcare and imaging workflows.
 
@@ -854,7 +854,107 @@ System Requirements
 
 ________________________________________
 
+### Summary for API Consumers
 
+The **DICOM Converter API** provides enhanced security and functionality to ensure reliable and secure interactions. 
+
+Below is an overview of the key features for API consumers:
+
+---
+
+### **1. Authentication**
+- **Purpose:** Protect all endpoints to ensure only authorized users can access the API.
+- **Mechanism:** 
+  - Endpoints require a **JWT (JSON Web Token)** for authentication.
+  - Consumers must use the `/login` endpoint to obtain a JWT token.
+  - Pass the token in the `Authorization` header for all API requests:
+    ```
+    Authorization: Bearer <JWT_TOKEN>
+    ```
+- **Usage:** Ensure your client application stores the token securely.
+
+---
+
+### **2. Rate Limiting**
+- **Purpose:** Prevent abuse and ensure fair usage.
+- **Mechanism:**
+  - Each endpoint has specific limits on the number of requests allowed per minute.
+  - Example:
+    - `/convert`: Max **10 requests/minute**.
+    - `/convert-batch`: Max **5 requests/minute**.
+- **Response When Limit Exceeded:**
+  - HTTP Status Code: **429 Too Many Requests**
+  - Response:
+    ```json
+    {
+      "detail": "Request limit exceeded. Try again later."
+    }
+    ```
+- **Tip for Consumers:** Handle rate-limiting errors gracefully by retrying after a delay.
+
+---
+
+### **3. Cross-Origin Resource Sharing (CORS)**
+- **Purpose:** Ensure only trusted domains can interact with the API.
+- **Policy:** 
+  - By default, only requests from trusted origins are allowed.
+  - If you need access, contact the API administrator to whitelist your domain.
+- **Error for Unauthorized Origin:** HTTP Status Code **403 Forbidden**.
+
+---
+
+### **4. HTTPS**
+- **Purpose:** Encrypt all communication between the client and the server.
+- **Mechanism:**
+  - All API endpoints are accessible only over `https://`.
+  - Protects sensitive data like credentials, tokens, and files from being intercepted.
+- **Consumer Note:** Ensure your client supports HTTPS communication.
+
+---
+
+### **5. Middleware**
+- **Purpose:** Ensure all requests are validated before processing.
+- **Global Checks Include:**
+  - **Authentication Verification:** Ensures valid tokens accompany all requests.
+  - **Rate-Limiting Enforcement:** Applies limits per endpoint.
+  - **Logging and Auditing:** Records all API interactions for security and troubleshooting.
+- **Error Responses from Middleware:**
+  - **401 Unauthorized:** When the JWT is missing or invalid.
+  - **403 Forbidden:** When accessing an endpoint without proper privileges.
+
+---
+
+### **Getting Started**
+1. **Login:** Obtain a JWT token using the `/login` endpoint.
+2. **Authorization:** Include the token in the `Authorization` header for all requests.
+3. **API Usage:**
+   - Convert files using `/convert` or `/convert-batch`.
+   - Convert other formats to DICOM using `/convert-to-dicom` or `/convert-to-dicom-batch`.
+   - Extract metadata using `/metadata` or `/metadata-batch`.
+
+### **Example Workflow**
+1. **Login to Obtain Token:**
+   ```
+   POST /login
+   Body: { "username": "your_username", "password": "your_password" }
+   Response: { "access_token": "your_jwt_token" }
+   ```
+
+2. **Make an Authenticated Request:**
+   ```
+   POST /convert
+   Headers:
+       Authorization: Bearer your_jwt_token
+   Body:
+       file: upload_file
+       format: "jpeg"
+       quality: 95
+   ```
+
+---
+
+### **Contact and Support**
+- For questions, support, or domain whitelisting, please contact the API administrator.
 
 
 

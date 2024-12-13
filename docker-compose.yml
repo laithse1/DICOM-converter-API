@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 services:
   dicom-api:
     build:
@@ -6,4 +6,31 @@ services:
     container_name: dicom-api
     ports:
       - "8000:8000"
+    environment:
+      - JWT_SECRET_KEY=your_super_secret_key
+      - JWT_ALGORITHM=HS256
+      - RATE_LIMIT_REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: always
+
+  redis:
+    image: redis:latest
+    container_name: dicom-redis
+    ports:
+      - "6379:6379"
+    restart: always
+    command: redis-server
+
+  nginx:
+    image: nginx:latest
+    container_name: dicom-nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./certs:/etc/ssl/certs
+      - ./private:/etc/ssl/private
+    depends_on:
+      - dicom-api
     restart: always
