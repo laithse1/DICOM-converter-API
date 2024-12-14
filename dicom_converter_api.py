@@ -21,11 +21,6 @@ from rate_limiter import limiter
 from auth_utils import create_jwt_token
 from fastapi import Form
 
-app = FastAPI()
-app.middleware("http")(authentication_middleware)
-
-
-
 
 # Configure logging
 logging.basicConfig(
@@ -39,6 +34,10 @@ app = FastAPI(
     title="Enhanced DICOM Converter API",
     description="API to convert DICOM files to various formats and extract metadata."
 )
+
+# Apply authentication middleware globally
+app.middleware("http")(authentication_middleware)
+
 
 # Temporary directory for file processing
 temp_dir = tempfile.mkdtemp()
@@ -154,8 +153,8 @@ def extract_metadata(dicom_file: UploadFile) -> Dict:
 # API Endpoints
 
 
-@app.post("/login")
-async def login(username: str = Form(...), password: str = Form(...)):
+@app.post("/authenticator")
+async def authenticator(username: str = Form(...), password: str = Form(...)):
     # Replace with your authentication logic
     if username == "admin" and password == "password":  # Replace with real credentials
         token = create_jwt_token(username)

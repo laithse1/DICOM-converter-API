@@ -6,7 +6,9 @@ import logging
 SECRET_KEY = "your-secure-secret-key"
 API_KEYS = {"client1": "client1-api-key", "client2": "client2-api-key"}  # Replace with your API keys
 
+
 def verify_jwt_token(token: str):
+    """Verify the JWT token."""
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         return payload
@@ -15,11 +17,18 @@ def verify_jwt_token(token: str):
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
+
 async def authentication_middleware(request: Request, call_next):
+    """Authentication middleware to protect endpoints."""
     try:
+        # Allow access to Swagger and OpenAPI endpoints without authentication
+        if request.url.path in ["/docs", "/redoc", "/authenticator","/openapi.json"]:
+            return await call_next(request)
+
         # Check for JWT or API Key in the request headers
         auth_header = request.headers.get("Authorization")
         api_key = request.headers.get("x-api-key")
+
         if api_key and api_key in API_KEYS.values():
             logging.info(f"Authenticated with API Key: {api_key}")
         elif auth_header and "Bearer" in auth_header:
@@ -28,6 +37,7 @@ async def authentication_middleware(request: Request, call_next):
             logging.info(f"Authenticated with JWT: {token}")
         else:
             raise HTTPException(status_code=403, detail="Unauthorized")
+
         return await call_next(request)
     except HTTPException as e:
         return JSONResponse(status_code=e.status_code, content={"detail": e.detail})

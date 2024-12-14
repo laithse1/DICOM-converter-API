@@ -10,7 +10,7 @@ PASSWORD = "password"
 
 def login():
     """Login to get the JWT token."""
-    login_url = f"{API_BASE_URL}/login"
+    login_url = f"{API_BASE_URL}/authenticator"
     login_data = {"username": USERNAME, "password": PASSWORD}
     response = requests.post(login_url, data=login_data)  # Use `data` for form fields
     
